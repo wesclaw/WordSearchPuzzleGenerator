@@ -1,0 +1,225 @@
+:root{
+  --cell_width: 45px;
+  --cell_height: 45px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+#word-search-grid {
+  display: grid;
+  grid-template-columns: repeat(15, var(--cell_height));
+  grid-template-rows: repeat(15, var(--cell_width));
+  gap: 2px;
+}
+
+.cell {
+  width: var(--cell_width);
+  height: var(--cell_height);
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  background-color: ghostwhite;
+}
+
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.words {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  width: 705px !important;
+  border-radius: 5px;
+  background-color: ghostwhite;
+}
+
+.pdf_paper{
+  height: 100% !important;
+  margin: 0 auto !important;
+  min-width: 705px !important;
+}
+
+.word-style{
+  margin: 15px;
+  padding: 0px;
+}
+
+.name-container{
+  display: flex;
+  padding-top: 20px;
+  align-items: end;
+  position: relative;
+}
+
+.name-container p {
+  margin: 0;
+}
+
+.line{
+  width: 300px;
+  background-color: rgba(0, 0, 0, 0.514);
+  height: 1px;
+  position: absolute;
+  bottom: -5px;
+  left: 50px;
+}
+
+.btn{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  gap: 5px;
+  font-weight: bold;
+  letter-spacing: .1em;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.btns-wrapper{
+  position: absolute;
+  top: 0%;
+  right: 20%;
+  padding: 5px;
+  z-index: 99;
+  display: flex;
+  gap: 5px;
+}
+
+.icon{
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.module-container{
+  position: absolute;
+  top: 0;
+  background-color: rgb(234, 236, 236);
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h2{
+  font-family: "Montserrat", sans-serif;
+  color: rgb(255 255 255);
+  font-size: 2.5rem;
+  margin: 0px 0px 10px 0px;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.527);
+  font-optical-sizing: auto;
+  font-weight: 800;
+  font-style: normal;
+  letter-spacing: .02em;
+}
+
+.module{
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.658);
+  max-width: 800px;
+  padding: 10px 50px 30px;
+
+  background: rgb(24,124,228);
+  background: linear-gradient(90deg, rgba(24,124,228,0.24467124277456642) 0%, rgba(29,45,62,1) 97%);
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.generateBtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  font-size: bold;
+  font-family: cursive;
+  background-image: linear-gradient(90deg, cyan, blue);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.generateBtn {
+  align-items: center;
+  appearance: none;
+  background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+  border: 0;
+  border-radius: 6px;
+  box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono",monospace;
+  height: 48px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
+  position: relative;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform;
+  font-size: 18px;
+}
+
+.generateBtn:focus {
+  box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+}
+
+.generateBtn:hover {
+  box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+.generateBtn:active {
+  box-shadow: #3c4fe0 0 3px 7px inset;
+  transform: translateY(2px);
+}
+
+.input{
+  position: relative;
+  font-size: 1.5rem;
+  cursor: text;
+  line-height: 20px;
+  padding: 0 16px;
+  height: 48px;
+  background-color: #fff;
+  border: 1px solid #d6d6e7;
+  border-radius: 6px;
+  color: rgb(35, 38, 59);
+  box-shadow: inset 0 1px 4px 0 rgb(119 122 175 / 30%);
+  overflow: hidden;
+  transition: all 100ms ease-in-out;
+  :focus {
+      border-color: #3c4fe0;
+      box-shadow: 0 1px 0 0 rgb(35 38 59 / 5%);
+  }
+}
+
+
+
