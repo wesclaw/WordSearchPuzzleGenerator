@@ -4,6 +4,25 @@ const pdfPaperElement = document.querySelector('.pdf_paper');
 
 const ws = new WebSocket('ws://localhost:3000');
 
+// 
+const form = document.getElementById('form')
+const input = document.querySelector('.input')
+
+
+ws.onopen = () => {
+    console.log('WebSocket connection opened');
+};
+
+form.addEventListener('submit', e=>{
+    e.preventDefault()
+    const getTopicData = input.value
+    input.value = ""
+    ws.send(getTopicData);
+})
+
+
+// 
+
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const grid = data.grid;
@@ -24,6 +43,8 @@ function renderGrid(grid) {
         }
     }
 }
+
+
 
 function renderWords(words) {
     wordsElement.innerHTML = ''; // Clear previous content
