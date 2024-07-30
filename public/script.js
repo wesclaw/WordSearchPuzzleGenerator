@@ -18,6 +18,11 @@ form.addEventListener('submit', e=>{
     const getTopicData = input.value
     input.value = ""
     ws.send(getTopicData);
+    console.log(getTopicData)
+
+    const moduleContainer = document.querySelector('.module-container')
+    ////////SET A TIMEOUT HERE UNTIL MESSAGE GETS THROUGH
+    moduleContainer.remove()
 })
 
 
