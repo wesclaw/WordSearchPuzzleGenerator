@@ -26,45 +26,32 @@
 //     ws.on('message', (data) => {
 //       const getString = data.toString();
 //       console.log(getString)
-//       main(getString)
+//       main(getString, ws)
 //     });
 //   });
 
 // // 
 
-// async function main(data, ws){
-//   const res = await openai.chat.completions.create({
-//         model: 'gpt-3.5-turbo',
-//         messages: [
-//             {
-//                 role: 'system',
-//                 content: 'Give me 19 words for kids based on the users topic. Dont use two words together; use only one word. Dont make more than 19 words. You must make at least 19 words. Do not add any dashes or lines to make words together. Do not make words more than 15 letters. 15 letters for eadch word is the max number.'
-//             },
-//             {
-//                 role: 'user',
-//                 content: data,
-//             }
-//         ]
-//     })
+// //////////////////////////////////////
 
-//     const words = [];
+// // wss.on('connection', (ws) => {
+// //     console.log('Client connected');
+// //     ws.on('message', (data) => {
+// //         const getString = data.toString();
+// //         console.log(`Received message: ${getString}`);
+// //         main(getString, ws);
+// //     });
 
-//     const responseData = res.choices[0].message.content;
+// //     ws.on('close', () => {
+// //         console.log('Client disconnected');
+// //     });
 
-//     const lines = responseData.trim().split('\n');
-//     lines.forEach(line => {
-//         const cleanedLine = line.replace(/^\d+\.\s*/, '').trim();
-//         const uppercasedLine = cleanedLine.toUpperCase();
-//         words.push(uppercasedLine);
-//     });
+// //     ws.on('error', (error) => {
+// //         console.error('WebSocket error:', error);
+// //     });
+// // });
 
-//     console.log(words);
-
-//     // 
-
-//     createGrid(words)
-
-// } 
+// /////////////////////////
 
 // const GRID_SIZE = 15;
 
@@ -115,168 +102,43 @@
 //     }
 // }
 
-// // wss.on('connection', (ws) => {
-// //     const grid = createGrid();
-// //     ws.send(JSON.stringify({ grid, words }));
-// // });
-
-// server.listen(3000, () => {
-//     console.log('Server is running on http://localhost:3000');
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const express = require('express');
-// const { Server } = require('ws');
-// const http = require('http');
-// require('dotenv').config()
-
-// const app = express();
-// const server = http.createServer(app);
-// const wss = new Server({ server });
-// const OpenAI = require('openai').OpenAI;
-
-// const GRID_SIZE = 15;
-
-// const openai = new OpenAI({
-//     apiKey: process.env.OPEN_AI_API
-// })
-
-// // 
-// wss.on('connection', (ws) => {
-//     ws.on('message', (data) => {
-//       const getString = data.toString();
-//       console.log(getString)
-//       main(getString, ws)
-//       createGrid()
-//     });
-//   });
-
-// // 
 
 // async function main(data, ws){
-//   const res = await openai.chat.completions.create({
-//         model: 'gpt-3.5-turbo',
-//         messages: [
-//             {
+//     const res = await openai.chat.completions.create({
+//           model: 'gpt-3.5-turbo',
+//           messages: [
+//               {
 //                 role: 'system',
-//                 content: 'Give me 19 words for kids based on the users topic. Dont use two words together; use only one word. Dont make more than 19 words. You must make at least 19 words. Do not add any dashes or lines to make words together. Do not make words more than 15 letters. 15 letters for eadch word is the max number.'
-//             },
-//             {
-//                 role: 'user',
-//                 content: data,
-//             }
-//         ]
-//     })
+//                 content: 'Give me 19 words for kids based on the users topic. Dont use two words together; use only one word. Dont make more than 19 words. You must make at least 19 words. Do not add any dashes or lines to make words together. Do not make words more than 15 letters. 15 letters for each word is the max number.'
+//               },
+//               {
+//                   role: 'user',
+//                   content: data,
+//               }
+//           ]
+//       })
+  
+//       const words = [];
+  
+//       const responseData = res.choices[0].message.content;
+  
+//       const lines = responseData.trim().split('\n');
+//       lines.forEach(line => {
+//           const cleanedLine = line.replace(/^\d+\.\s*/, '').trim();
+//           const uppercasedLine = cleanedLine.toUpperCase();
+//           words.push(uppercasedLine);
+//       });
+  
+//       console.log(words);
 
-//     const words = [];
+//       const grid = createGrid(words, ws);
+//       ws.send(JSON.stringify({ grid, words }));
+//   } 
 
-//     const responseData = res.choices[0].message.content;
-
-//     const lines = responseData.trim().split('\n');
-//     lines.forEach(line => {
-//         const cleanedLine = line.replace(/^\d+\.\s*/, '').trim();
-//         const uppercasedLine = cleanedLine.toUpperCase();
-//         words.push(uppercasedLine);
-//     });
-//     console.log(words)
-// } 
-
-
-// function createGrid() {
-
-//     const grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
-//     for (const word of words) {
-//         placeWordInGrid(grid, word);
-//     }
-//     fillGridWithRandomLetters(grid);
-//     return grid;
-// }
-
-// function placeWordInGrid(grid, word) {
-//     const directions = [[1, 0], [0, 1], [1, 1]];
-//     let placed = false;
-//     while (!placed) {
-//         const direction = directions[Math.floor(Math.random() * directions.length)];
-//         const row = Math.floor(Math.random() * GRID_SIZE);
-//         const col = Math.floor(Math.random() * GRID_SIZE);
-//         if (canPlaceWord(grid, word, row, col, direction)) {
-//             for (let i = 0; i < word.length; i++) {
-//                 grid[row + i * direction[0]][col + i * direction[1]] = word[i];
-//             }
-//             placed = true;
-//         }
-//     }
-// }
-
-// function canPlaceWord(grid, word, row, col, direction) {
-//     for (let i = 0; i < word.length; i++) {
-//         const newRow = row + i * direction[0];
-//         const newCol = col + i * direction[1];
-//         if (newRow >= GRID_SIZE || newCol >= GRID_SIZE || (grid[newRow][newCol] && grid[newRow][newCol] !== word[i])) {
-//             return false;
-//         }
-//     }
-//     return true;
-// }
-
-// function fillGridWithRandomLetters(grid, ws) {
-//     for (let row = 0; row < GRID_SIZE; row++) {
-//         for (let col = 0; col < GRID_SIZE; col++) {
-//             if (!grid[row][col]) {
-//                 grid[row][col] = String.fromCharCode(65 + Math.floor(Math.random() * 26)); // Random A-Z
-//             }
-//         }
-//     }
-// }
-
-// // wss.on('connection', (ws) => {
-// //     const grid = createGrid();
-// //     ws.send(JSON.stringify({ grid, words }));
-// // });
+// wss.on('connection', (ws) => {
+//     const grid = createGrid();
+//     ws.send(JSON.stringify({ grid, words }));
+// });
 
 // server.listen(3000, () => {
 //     console.log('Server is running on http://localhost:3000');
@@ -291,32 +153,17 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-///////this code only works once, when the page is reloaded, no grid and words are being made
 
 const express = require('express');
 const { Server } = require('ws');
 const http = require('http');
 require('dotenv').config();
+const { OpenAI } = require('openai');
 
 const app = express();
 const server = http.createServer(app);
 const wss = new Server({ server });
 
-const OpenAI = require('openai').OpenAI;
 const openai = new OpenAI({
     apiKey: process.env.OPEN_AI_API
 });
@@ -324,60 +171,71 @@ const openai = new OpenAI({
 const GRID_SIZE = 15;
 
 wss.on('connection', (ws) => {
+    console.log('Client connected');
     ws.on('message', async (data) => {
-        const getString = data.toString();
-        console.log(`Received topic: ${getString}`);
-
         try {
-            // Fetch words from OpenAI
-            const words = await fetchWordsFromOpenAI(getString);
-
-            // Create the grid
-            const grid = createGrid(words);
-
-            // Send the grid and words to the client
-            ws.send(JSON.stringify({ grid, words }));
+            const getString = data.toString();
+            console.log('Received topic:', getString);
+            await main(getString, ws);
         } catch (error) {
-            console.error('Error processing request:', error);
-            ws.send(JSON.stringify({ error: 'Failed to process the request' }));
+            console.error('Error processing message:', error);
+            ws.send(JSON.stringify({ error: 'An error occurred while processing your request.' }));
         }
     });
 });
 
-// Function to fetch words from OpenAI
-async function fetchWordsFromOpenAI(topic) {
-    const res = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [
-            {
-                role: 'system',
-                content: 'Give me 19 words for kids based on the users topic. Dont use two words together; use only one word. Dont make more than 19 words. You must make at least 19 words. Do not add any dashes or lines to make words together. Do not make words more than 15 letters. 15 letters for each word is the max number.'
-            },
-            {
-                role: 'user',
-                content: topic,
-            }
-        ]
-    });
+async function main(data, ws) {
+    try {
+        const res = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: [
+                {
+                    role: 'system',
+                    content: 'Give me 19 words for kids based on the users topic. Do not use two words together; use only one word. Do not make more than 19 words. You must make at least 19 words. Do not add any dashes or lines to make words together. Do not make words more than 15 letters. 15 letters for each word is the max number.'
+                },
+                {
+                    role: 'user',
+                    content: data,
+                }
+            ]
+        });
 
-    const responseData = res.choices[0].message.content;
-    const lines = responseData.trim().split('\n');
-    return lines.map(line => line.replace(/^\d+\.\s*/, '').trim().toUpperCase());
+        const words = parseWords(res.choices[0].message.content);
+        console.log('Processed words:', words);
+
+        const grid = createGrid(words);
+
+        console.log('Sending grid and words to client');
+        ws.send(JSON.stringify({ grid, words }));
+    } catch (error) {
+        console.error('Error generating completion:', error);
+        ws.send(JSON.stringify({ error: 'An error occurred while generating the word list.' }));
+    }
 }
 
-// Function to create the grid
+function parseWords(responseData) {
+    const words = [];
+    const lines = responseData.trim().split('\n').filter(line => line.trim() !== '');
+    lines.forEach(line => {
+        const cleanedLine = line.replace(/^\d+\.\s*/, '').trim();
+        if (cleanedLine) {
+            words.push(cleanedLine.toUpperCase());
+        }
+    });
+    return words;
+}
+
 function createGrid(words) {
     const grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
-
-    words.forEach(word => placeWordInGrid(grid, word));
-
+    for (const word of words) {
+        placeWordInGrid(grid, word);
+    }
     fillGridWithRandomLetters(grid);
     return grid;
 }
 
-// Function to place a word in the grid
 function placeWordInGrid(grid, word) {
-    const directions = [[1, 0], [0, 1], [1, 1]]; // Right, Down, Diagonal
+    const directions = [[1, 0], [0, 1], [1, 1]];
     let placed = false;
     while (!placed) {
         const direction = directions[Math.floor(Math.random() * directions.length)];
@@ -392,7 +250,6 @@ function placeWordInGrid(grid, word) {
     }
 }
 
-// Function to check if a word can be placed in the grid
 function canPlaceWord(grid, word, row, col, direction) {
     for (let i = 0; i < word.length; i++) {
         const newRow = row + i * direction[0];
@@ -404,7 +261,6 @@ function canPlaceWord(grid, word, row, col, direction) {
     return true;
 }
 
-// Function to fill the grid with random letters
 function fillGridWithRandomLetters(grid) {
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
@@ -418,3 +274,16 @@ function fillGridWithRandomLetters(grid) {
 server.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+

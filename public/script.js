@@ -9,9 +9,15 @@ const form = document.getElementById('form')
 const input = document.querySelector('.input')
 
 
+// function startConnection(){
+   
+// }
+
 ws.onopen = () => {
     console.log('WebSocket connection opened');
 };
+
+
 
 form.addEventListener('submit', e=>{
     e.preventDefault()
@@ -167,13 +173,4 @@ window.addEventListener('resize', adjustPdfPaperSize);
 resetBtn.addEventListener('click', e=>{
     window.location.reload()
 })
-
-
-
-
-
-
-
-
-
 
