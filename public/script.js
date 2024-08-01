@@ -8,27 +8,22 @@ const ws = new WebSocket('ws://localhost:3000');
 const form = document.getElementById('form')
 const input = document.querySelector('.input')
 
-
-// function startConnection(){
-   
-// }
-
 ws.onopen = () => {
     console.log('WebSocket connection opened');
 };
-
-
 
 form.addEventListener('submit', e=>{
     e.preventDefault()
     const getTopicData = input.value
     input.value = ""
-    ws.send(getTopicData);
     console.log(getTopicData)
-
-    const moduleContainer = document.querySelector('.module-container')
-    ////////SET A TIMEOUT HERE UNTIL MESSAGE GETS THROUGH
-    moduleContainer.remove()
+    ws.send(getTopicData);
+    
+    
+   const moduleContainer = document.querySelector('.module-container')
+   moduleContainer.remove()
+    
+    
 })
 
 
@@ -38,6 +33,12 @@ ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const grid = data.grid;
     const words = data.words;
+
+    ///////find out why no console log here in clientside
+    console.log(data)
+
+    console.log(words)
+    console.log(grid)
 
     renderGrid(grid);
     renderWords(words);
