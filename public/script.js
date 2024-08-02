@@ -18,31 +18,39 @@ form.addEventListener('submit', e=>{
     input.value = ""
     console.log(getTopicData)
     ws.send(getTopicData);
-    
-    
    const moduleContainer = document.querySelector('.module-container')
    moduleContainer.remove()
-    
-    
 })
 
 
-// 
-
 ws.onmessage = (event) => {
+    console.log(event.data);
+
     const data = JSON.parse(event.data);
     const grid = data.grid;
     const words = data.words;
 
-    ///////find out why no console log here in clientside
-    console.log(data)
-
-    console.log(words)
-    console.log(grid)
-
     renderGrid(grid);
     renderWords(words);
-};
+}
+
+// ws.onmessage = (event) => {
+    
+//     const data = JSON.parse(event.data);
+//     const grid = data.grid;
+//     const words = data.words;
+
+//     ///////find out why no console log here in clientside
+//     console.log(data)
+
+//     console.log(words)
+//     console.log(grid)
+
+//     renderGrid(grid);
+//     renderWords(words);
+
+    
+// };
 
 function renderGrid(grid) {
     gridElement.innerHTML = '';

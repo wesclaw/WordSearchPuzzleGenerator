@@ -7,31 +7,10 @@ const app = express();
 const server = http.createServer(app);
 const wss = new Server({ server });
 
-// 
-
-// const words = 
-// [
-//     "NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SPACE", "SEX", "MOON", "MAN", "NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SPACE", "SEX", "MOON", "MAN", 
-// ];
-
-
-
 const OpenAI = require('openai').OpenAI;
 const openai = new OpenAI({
     apiKey: process.env.OPEN_AI_API
 })
-
-
-
-//////////////////////////////////////
-
-
-
-
-
-
-
-/////////////////////////
 
 const GRID_SIZE = 15;
 
@@ -82,12 +61,7 @@ function fillGridWithRandomLetters(grid) {
     }
 }
 
-
-
-
-
 async function main(data){
-    ////add a try here?
     const res = await openai.chat.completions.create({
           model: 'gpt-3.5-turbo',
           messages: [
@@ -115,36 +89,138 @@ async function main(data){
   
       console.log(words);
 
+      return words
+
   } 
+
+
+// wss.on('connection', (ws) => {
+
+
+//     ws.on('message', (data) => {
+//       const getString = data.toString();
+//       main(getString)
+
+      
+//       /////i shud be here sending the json back to frontend grid and words
+
+//     });
+// });
+
+
+
+wss.on('connection', (ws) => {
+    console.log('New client connected');
+
+    // Handle incoming messages from clients
+    ws.on('message', async (data) => {
+        try {
+            const getString = data.toString();
+            console.log('Received from client:', getString);
+
+            // Call the main function to generate words
+            const words = await main(getString);
+
+            // Create the grid based on the generated words
+            const grid = createGrid(words);
+
+            // Send the grid and words back to the client
+            const response = {
+                grid: grid,
+                words: words
+            };
+            ws.send(JSON.stringify(response));
+        } catch (error) {
+            console.error('Error handling message:', error);
+        }
+    });
+
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
+
+    // Handle WebSocket errors
+    ws.on('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
+
+})
+
+
+
+
+
+ server.listen(3000, () => {
+     console.log('Server is running on http://localhost:3000');
+ });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 
+
+// const words = 
+// [
+//     "NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SPACE", "SEX", "MOON", "MAN", "NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SPACE", "SEX", "MOON", "MAN", 
+// ];
 
 // wss.on('connection', (ws) => {
 //     const grid = createGrid();
 //     ws.send(JSON.stringify({ grid, words }));
 // });
 
-wss.on('connection', (ws) => {
-    ws.on('message', (data) => {
-      const getString = data.toString();
-      console.log(getString)
-      main(getString)
-    });
-
-  });
-
-
-server.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
-});
 
 
 
-
-
-
-
-
-
-
+////////////////////////////////////
 
 
 
