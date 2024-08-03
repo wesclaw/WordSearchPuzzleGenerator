@@ -563,8 +563,8 @@ form.addEventListener('submit', e=>{
     input.value = ""
     console.log(getTopicData)
     ws.send(getTopicData);
-   const moduleContainer = document.querySelector('.module-container')
-   moduleContainer.remove()
+    const moduleContainer = document.querySelector('.module-container')
+    moduleContainer.remove()
 })
 
 ws.onopen = () => {
@@ -575,6 +575,7 @@ ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const grid = data.grid;
     const words = data.words;
+
 
     renderGrid(grid);
     renderWords(words);
