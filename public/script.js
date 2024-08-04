@@ -535,15 +535,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
 const gridElement = document.getElementById('word-search-grid');
 const wordsElement = document.querySelector('.words'); // Target the .words div
 
@@ -551,39 +542,14 @@ const pdfPaperElement = document.querySelector('.pdf_paper');
 
 const ws = new WebSocket('ws://localhost:3000');
 
-
-const form = document.getElementById('form')
-const input = document.querySelector('.input')
-
-
-
-form.addEventListener('submit', e=>{
-    e.preventDefault()
-    const getTopicData = input.value
-    input.value = ""
-    console.log(getTopicData)
-    ws.send(getTopicData);
-    const moduleContainer = document.querySelector('.module-container')
-    moduleContainer.remove()
-})
-
-ws.onopen = () => {
-    console.log('WebSocket connection opened');
-};
-
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     const grid = data.grid;
     const words = data.words;
 
-
     renderGrid(grid);
     renderWords(words);
 };
-
-
-
-
 
 function renderGrid(grid) {
     gridElement.innerHTML = '';
@@ -669,6 +635,8 @@ document.getElementById('downloadPdf').addEventListener('click', async () => {
 // Call adjustPdfPaperSize on load and resize
 window.addEventListener('load', adjustPdfPaperSize);
 window.addEventListener('resize', adjustPdfPaperSize);
+
+
 
 
 
