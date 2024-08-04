@@ -532,9 +532,6 @@
 
 
 
-
-
-
 const gridElement = document.getElementById('word-search-grid');
 const wordsElement = document.querySelector('.words'); // Target the .words div
 
@@ -635,31 +632,6 @@ document.getElementById('downloadPdf').addEventListener('click', async () => {
 // Call adjustPdfPaperSize on load and resize
 window.addEventListener('load', adjustPdfPaperSize);
 window.addEventListener('resize', adjustPdfPaperSize);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
