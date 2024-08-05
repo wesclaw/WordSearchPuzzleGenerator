@@ -529,24 +529,101 @@
 
 
 
-
+/////////////////////this code works better than ws but still only workds sometimes wtf
 
 
 const gridElement = document.getElementById('word-search-grid');
-const wordsElement = document.querySelector('.words'); // Target the .words div
-
+const wordsElement = document.querySelector('.words'); 
 const pdfPaperElement = document.querySelector('.pdf_paper');
 
-const ws = new WebSocket('ws://localhost:3000');
+async function fetchData() {
+    try {
+        // Make an HTTP GET request to the /data endpoint
+        const response = await fetch('http://localhost:3000/data');
+        
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    const grid = data.grid;
-    const words = data.words;
+        // Parse the JSON data from the response
+        const data = await response.json();
+        const { grid, words } = data;
 
-    renderGrid(grid);
-    renderWords(words);
-};
+        // Render the grid and words on the page
+        renderGrid(grid);
+        renderWords(words);
+    } catch (error) {
+        console.error('Error fetching data from server:', error);
+    }
+}
+
+document.getElementById('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const inputValue = document.querySelector('.input').value;
+    document.querySelector('.module-container').style.display = 'none';
+
+    try {
+        const response = await fetch('http://localhost:3000/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ topic: inputValue })
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('Received data:', data); // Log received data
+        const { grid, words } = data;
+        renderGrid(grid);
+        renderWords(words);
+    } catch (error) {
+        console.error('Error sending data to server:', error);
+    }
+});
+
+
+
+const lowerCaseOrUpperCaseBtn = document.getElementById('lowerCaseOrUpperCaseBtn');
+
+function changeTextCase() {
+    const cells = document.querySelectorAll('.cell');
+    const words = document.querySelectorAll('.word-style');
+    let allLowerCase = true;
+
+    cells.forEach((cell) => {
+        if (cell.textContent !== cell.textContent.toLowerCase()) {
+            allLowerCase = false;
+        }
+    });
+
+    words.forEach((word) => {
+        if (word.textContent !== word.textContent.toLowerCase()) {
+            allLowerCase = false;
+        }
+    });
+
+    if (allLowerCase) {
+        cells.forEach((cell) => {
+            cell.textContent = cell.textContent.toUpperCase();
+        });
+        words.forEach((word) => {
+            word.textContent = word.textContent.toUpperCase();
+        });
+        lowerCaseOrUpperCaseBtn.textContent = 'lowercase';
+    } else {
+        cells.forEach((cell) => {
+            cell.textContent = cell.textContent.toLowerCase();
+        });
+        words.forEach((word) => {
+            word.textContent = word.textContent.toLowerCase();
+        });
+        lowerCaseOrUpperCaseBtn.textContent = 'UPPERCASE';
+    }
+}
+
+lowerCaseOrUpperCaseBtn.addEventListener('click', changeTextCase);
+// 
 
 function renderGrid(grid) {
     gridElement.innerHTML = '';
@@ -629,18 +706,10 @@ document.getElementById('downloadPdf').addEventListener('click', async () => {
     spinIcon.src = '/icons/print.png'
 });
 
-// Call adjustPdfPaperSize on load and resize
+// 
+
+// 
+window.addEventListener('load', fetchData);
 window.addEventListener('load', adjustPdfPaperSize);
 window.addEventListener('resize', adjustPdfPaperSize);
-
-
-
-
-
-
-
-
-
-
-
 

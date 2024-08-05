@@ -563,19 +563,145 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Steps Breakdown:
+// Client to Server (HTTP Request):
+
+// The client sends the input value (topic) to the server using an HTTP POST request.
+// Server to OpenAI API (HTTP Request):
+
+// The server receives the input value and makes an HTTP request to the OpenAI API to generate words based on the topic.
+// Server Processing:
+
+// The server processes the words received from the OpenAI API, creates the word grid, and prepares the data to send back to the client.
+// Server to Client (HTTP Response):
+
+// The server sends the generated word grid and words back to the client as an HTTP response.
+// Detailed Steps with HTTP Usage:
+// Client to Server (Step 1):
+
+// The client (webpage) sends an HTTP POST request to the server with the input value (topic).
+// Example:
+
+// Client uses Axios to send a POST request: axios.post('/generate', { topic }).
+// Server to OpenAI API (Step 2):
+
+// The server receives the topic from the client.
+// The server then makes an HTTP POST request to the OpenAI API to generate words based on the topic.
+// Example:
+
+// Server uses Axios or another HTTP client to send a POST request to OpenAI API: axios.post('https://api.openai.com/v1/engines/...', requestData).
+// Server Processing (Step 3):
+
+// The server processes the words received from the OpenAI API.
+// The server creates the word grid using these words.
+// Server to Client (Step 4):
+
+// The server sends the generated word grid and words back to the client as an HTTP response.
+// Example:
+
+// Server sends back a JSON response: res.json({ grid, words }).
+// Summary:
+// HTTP Requests:
+// Client to Server: To send the topic.
+// Server to OpenAI: To get the words based on the topic.
+// HTTP Responses:
+// Server to Client: To send back the grid and words.
+
+
+
+
+
+
+
 const express = require('express');
 const { Server } = require('ws');
 const http = require('http');
 
 const app = express();
 const server = http.createServer(app);
-const wss = new Server({ server });
+
+require('dotenv').config()
+const axios = require('axios');
+const OpenAI = require('openai').OpenAI;
+const openai = new OpenAI({
+    apiKey: process.env.OPEN_AI_API
+})
+const cors = require('cors');
+app.use(cors());
+
+app.use(express.json());
+// Middleware to parse URL-encoded bodies (if you also need this)
+app.use(express.urlencoded({ extended: true }));
+// 
 
 app.use(express.static('public'));
 
 const GRID_SIZE = 15;
 
-const words = ["NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SARAHISGOOD", "WHYdoesthiswork"];
+// const words = ["NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SARAHISGOOD", "WHYdoesthiswork"];
+
+// 
+const words = []
+async function fetchWordsFromOpenAI(topic) {
+    try {
+        const res = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: [
+                {
+                    role: 'system',
+                    content: 'Give me 19 words for kids based on the user\'s topic. Don\'t use two words together; use only one word. Don\'t make more than 19 words. You must make at least 19 words. Do not add any dashes or lines to make words together. Do not make words more than 15 letters. 15 letters for each word is the max number.'
+                },
+                {
+                    role: 'user',
+                    content: topic,
+                }
+            ]
+        });
+
+        const responseData = res.choices[0].message.content;
+        const lines = responseData.trim().split('\n');
+        const newWords = lines.map(line => line.replace(/^\d+\.\s*/, '').trim().toUpperCase());
+
+        // Clear the existing words array and push new words
+        words.length = 0; // Clear the array
+        words.push(...newWords); // Add new words to the array
+        console.log(words)
+        return newWords;
+    } catch (error) {
+        console.error('Error fetching words from OpenAI:', error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+}
+// 
 
 function createGrid() {
     const grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
@@ -623,10 +749,39 @@ function fillGridWithRandomLetters(grid) {
     }
 }
 
-wss.on('connection', (ws) => {
-    const grid = createGrid();
-    ws.send(JSON.stringify({ grid, words }));
+app.post('/generate', async (req, res) => {
+    const topic = req.body.topic;
+
+    try {
+        // Fetch words from OpenAI
+        const newWords = await fetchWordsFromOpenAI(topic);
+        words.splice(0, words.length, ...newWords); // Replace the existing words with new words
+
+        // Generate grid with new words
+        const grid = createGrid();
+
+        // Send grid and words back to client
+        console.log('Sending data to client:', { grid, words });
+        res.json({ grid, words });
+    } catch (error) {
+        console.error('Error generating words:', error);
+        res.status(500).send('Error generating words');
+    }
 });
+
+
+
+app.get('/data', (req, res) => {
+    try {
+        const grid = createGrid();
+        res.json({ grid, words });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).send('Error fetching data');
+    }
+});
+// 
+
 
 server.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
