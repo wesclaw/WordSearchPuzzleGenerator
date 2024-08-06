@@ -713,3 +713,19 @@ window.addEventListener('load', fetchData);
 window.addEventListener('load', adjustPdfPaperSize);
 window.addEventListener('resize', adjustPdfPaperSize);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

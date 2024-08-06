@@ -770,7 +770,7 @@ app.post('/generate', async (req, res) => {
 });
 
 
-
+////why call it two times both in /data and in /generate
 app.get('/data', (req, res) => {
     try {
         const grid = createGrid();
@@ -786,8 +786,6 @@ app.get('/data', (req, res) => {
 server.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
-
-
 
 
 
