@@ -582,8 +582,6 @@ document.getElementById('form').addEventListener('submit', async (e) => {
     }
 });
 
-
-
 const lowerCaseOrUpperCaseBtn = document.getElementById('lowerCaseOrUpperCaseBtn');
 
 function changeTextCase() {
@@ -717,15 +715,7 @@ window.addEventListener('resize', adjustPdfPaperSize);
 
 
 
-
-
-
-
-
-
-
-
-
+//////post to stackoverflow. it works sometimes. dont DELETE ABOVE CODE
 
 
 
