@@ -252,7 +252,7 @@
 // app.use(express.static('public'));
 
 // const GRID_SIZE = 15;
-// const words = ["NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SARAHISGOOD"];
+// const words = ["NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SARAHISGOOD", "HOWTHEFUCKDOESIT"];
 
 // function createGrid() {
 //     const grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
@@ -794,6 +794,32 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ////this code worked more than a few times. always gets stuck on i wanna go home to momma prompt'
 
 // const express = require('express');
@@ -923,73 +949,26 @@
 
 
 
-
-
-
-///////check to see if this works becaue i tried and it has default words. just make sure it add something. what r the default words?
+//////////////////////COMPLETLY START OVER FROM HERE. RESEARCH HOW WS WORKS, ASYNC WORKS, TALKING TO SERVER AND API, ETC
 
 const express = require('express');
 const { Server } = require('ws');
 const http = require('http');
+
 const app = express();
 const server = http.createServer(app);
-require('dotenv').config()
-const OpenAI = require('openai').OpenAI;
-const openai = new OpenAI({
-    apiKey: process.env.OPEN_AI_API
-})
-const cors = require('cors');
-app.use(cors());
+const wss = new Server({ server });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 const GRID_SIZE = 15;
-
-const DEFAULT_WORDS = []; // Default empty state for words
-let words = [...DEFAULT_WORDS]; // Initialize with default words
-
-async function fetchWordsFromOpenAI(topic) {
-    try {
-        const res = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'Give me 19 words for kids based on the user\'s topic. Don\'t use two words together; use only one word. Don\'t make more than 19 words. You must make at least 19 words. Do not add any dashes or lines to make words together. Do not make words more than 15 letters. 15 letters for each word is the max number.'
-                },
-                {
-                    role: 'user',
-                    content: topic,
-                }
-            ]
-        });
-
-        const responseData = res.choices[0].message.content;
-        const lines = responseData.trim().split('\n');
-        const newWords = lines.map(line => line.replace(/^\d+\.\s*/, '').trim().toUpperCase());
-
-        // Update the words array with new words
-        words = [...newWords];
-        console.log(words);
-
-        return words;
-    } catch (error) {
-        console.error('Error fetching words from OpenAI:', error);
-        throw error;
-    }
-}
+const words = ["NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SARAHISGOOD", "HOWTHEFUCKDOESIT"];
 
 function createGrid() {
     const grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
-
-    if (words.length > 0) {
-        for (const word of words) {
-            placeWordInGrid(grid, word);
-        }
+    for (const word of words) {
+        placeWordInGrid(grid, word);
     }
-
     fillGridWithRandomLetters(grid);
     return grid;
 }
@@ -1031,31 +1010,9 @@ function fillGridWithRandomLetters(grid) {
     }
 }
 
-app.post('/generate', async (req, res) => {
-    const topic = req.body.topic;
-    console.log(topic);
-    try {
-        const newWords = await fetchWordsFromOpenAI(topic);
-        words = [...newWords]; // Update words array
-        const grid = createGrid();
-
-        // Send grid and words back to client
-        console.log('Sending data to client:', { grid, words });
-        res.json({ grid, words });
-    } catch (error) {
-        console.error('Error generating words:', error);
-        res.status(500).send('Error generating words');
-    }
-});
-
-app.get('/data', (req, res) => {
-    try {
-        const grid = createGrid();
-        res.json({ grid, words });
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).send('Error fetching data');
-    }
+wss.on('connection', (ws) => {
+    const grid = createGrid();
+    ws.send(JSON.stringify({ grid, words }));
 });
 
 server.listen(3000, () => {
