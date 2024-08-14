@@ -15,22 +15,6 @@ body {
   height: 250px;
 }
 
-.navbar{
-  position: absolute;
-  z-index: 9999;
-  background-color: burlywood;
-  top: 0px;
-  height: 50px;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.navbar .container{
-  display: flex;
-}
-
 #word-search-grid {
   display: grid;
   grid-template-columns: repeat(15, var(--cell_height));
