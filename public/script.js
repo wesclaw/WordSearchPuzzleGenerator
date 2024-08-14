@@ -1144,16 +1144,8 @@ ws.onopen = () => {
 form.addEventListener('submit',e=>{
     e.preventDefault();
     const inputValue = input.value;
-
-    if (ws.readyState === WebSocket.OPEN) {
-        // Send the input value to the server via WebSocket
-        ws.send(JSON.stringify({ value: inputValue }));
-        console.log('Sent to server:', inputValue);
-    } else {
-        console.error('WebSocket connection is not open.');
-    }
-
-    // Clear the input field after sending the data
+    ws.send(JSON.stringify({ value: inputValue }));
+    console.log('Sent to server:', inputValue);
     input.value = '';
     moduleContainer.remove()
 })
@@ -1180,7 +1172,6 @@ function renderWords(words) {
         // wordElement.textContent = word;
         wordElement.innerHTML = `<p class="word-style">${word}</p>`
         wordElement.style.color = 'black';
-        // wordElement.style.marginRight = '15px'; 
         wordElement.style.display = 'inline-block'; 
         wordsElement.appendChild(wordElement);
     });

@@ -1201,14 +1201,12 @@ app.use(express.static('public'));
 
 // Function to call OpenAI API
 async function main(data) {
-    try {
-        // Call OpenAI API with the correct method
         const response = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo',
             messages: [
                 {
                     role: 'system',
-                    content: 'Give me 19 words for kids based on the user\'s topic. Don\'t use two words together; use only one word. Don\'t make more than 19 words. You must make at least 19 words. Do not add any dashes or lines to make words together. Do not make words more than 15 letters. 15 letters for each word is the max number.'
+                    content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, or any special characters. If fewer than 19 words are relevant, just provide the relevant words.'
                 },
                 {
                     role: 'user',
@@ -1216,35 +1214,22 @@ async function main(data) {
                 }
             ]
         });
-
-        // Extracting and processing the response data
-        const responseData = response.choices[0].message.content
         
+        const responseData = response.choices[0].message.content;
+        console.log(responseData)
         words.push(...responseData)
-        console.log(words)
+    } 
 
-    } catch (error) {
-        console.error('Error calling OpenAI API:', error);
-        // Return the current state of words array in case of an error
-    }
 
-}
     
 
 wss.on('connection', (ws) => {
     console.log('New client connected');
 
-    ws.on('message', async (message) => { // Make the message handler async
-        const topic = message.toString(); // Convert the message to a string
-        console.log(topic);
-
-        // Call OpenAI API with the received message and wait for it to complete
+    ws.on('message', async (message) => { 
+        const topic = message.toString(); 
         const updatedWords = await main(topic);
-
-        // Generate the grid with the updated words
         const grid = createGrid();
-
-        // Send the grid and updated words back to the client
         ws.send(JSON.stringify({ grid, words }));
     });
 
