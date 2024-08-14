@@ -1134,7 +1134,11 @@ const ws = new WebSocket('ws://localhost:3000');
 
 const form = document.getElementById('form')
 const input = document.querySelector('.input')
-const moduleContainer = document.querySelector('.module-container')
+const moduleContainer = document.querySelector('.module-container');
+const resetBtn = document.getElementById('resetBtn');
+const pdf_title = document.getElementById('pdf_title');
+const removeLoad = document.querySelector('.removeLoad')
+let storedInputValue = ''; 
 
 ws.onopen = () => {
     console.log('WebSocket connection opened');
@@ -1143,11 +1147,17 @@ ws.onopen = () => {
 form.addEventListener('submit',e=>{
     e.preventDefault();
     const inputValue = input.value;
-    ws.send(JSON.stringify({ value: inputValue }));
-    console.log('Sent to server:', inputValue);
-    input.value = '';
-    moduleContainer.remove()
+    if(!inputValue){
+        return
+    }else{
+        ws.send(JSON.stringify({ value: inputValue }));
+        console.log('Sent to server:', inputValue);
+        input.value = '';
+        moduleContainer.remove()
+        storedInputValue = inputValue;
+    }
 })
+
 
 
 function renderGrid(grid) {
@@ -1162,8 +1172,6 @@ function renderGrid(grid) {
     }
 }
 
-
-
 function renderWords(words) {
     wordsElement.innerHTML = ''; // Clear previous content
     words.forEach((word) => {
@@ -1174,6 +1182,8 @@ function renderWords(words) {
         wordElement.style.display = 'inline-block';
         wordsElement.appendChild(wordElement);
     });
+    removeLoad.remove()
+    pdf_title.textContent = storedInputValue;
 }
 
 const lowerCaseOrUpperCaseBtn = document.getElementById('lowerCaseOrUpperCaseBtn');
@@ -1288,4 +1298,6 @@ ws.onmessage = (event) => {
     renderWords(words);
 }
 
-
+resetBtn.addEventListener('click',e=>{
+    window.location.reload()
+})

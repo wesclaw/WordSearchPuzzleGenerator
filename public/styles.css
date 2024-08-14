@@ -10,6 +10,27 @@ body {
   overflow-x: hidden;
 }
 
+.loadBig{
+  width: 250px;
+  height: 250px;
+}
+
+.navbar{
+  position: absolute;
+  z-index: 9999;
+  background-color: burlywood;
+  top: 0px;
+  height: 50px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar .container{
+  display: flex;
+}
+
 #word-search-grid {
   display: grid;
   grid-template-columns: repeat(15, var(--cell_height));
@@ -49,6 +70,17 @@ body {
   height: 100% !important;
   margin: 0 auto !important;
   min-width: 705px !important;
+}
+
+#pdf_title{
+  font-family: "Montserrat", sans-serif;
+  color: rgb(27, 27, 27);
+  font-size: 2.5rem;
+  margin: 50px 0px 50px 0px;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: .02em;
 }
 
 .word-style{
@@ -109,7 +141,7 @@ body {
   background-color: rgb(234, 236, 236);
   width: 100%;
   height: 100%;
-  z-index: 9999;
+  z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;

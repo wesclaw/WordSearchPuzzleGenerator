@@ -1204,41 +1204,35 @@ const GRID_SIZE = 15;
 
 let words = [];
 
-// Function to call OpenAI API
     async function main(data) {
-        words = []
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            messages: [
-                {
-                    role: 'system',
-                    content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
-                },
-                {
-                    role: 'user',
-                    content: data,
-                }
-            ]
-        });
-        // const responseData = response.choices[0].message.content;
-
-        // const wordsArray = responseData.trim().split(/\s+/);
-
-        // words.push(...wordsArray);
-
-        // console.log(words);
-
-        const responseData = response.choices[0].message.content;
-        const wordsArray = responseData.trim().split(/\s+/);
-        const filteredWordsArray = wordsArray.filter(word => word.length <= 15);
-        const limitedWordsArray = filteredWordsArray.slice(0, 19);
-        words.push(...limitedWordsArray);
-        console.log(words);
-
-
-
-        //////try this////above. then try with TRY and Catch method////the problem is based on openai api response. too big words too many words??
-    } 
+        try {
+            words = [];
+            const response = await openai.chat.completions.create({
+                model: 'gpt-3.5-turbo',
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
+                    },
+                    /////i wanna make more words maybe 30 is okay? change on slice and here
+                    {
+                        role: 'user',
+                        content: data,
+                    }
+                ]
+            });
+            const responseData = response.choices[0].message.content;
+            let wordsArray = responseData.trim().split(/\s+/);
+            wordsArray = wordsArray
+            .map(word => word.replace(/[^a-zA-Z]/g, '').toUpperCase()) 
+            .filter(word => word.length <= 15); 
+            const limitedWordsArray = wordsArray.slice(0, 19); 
+            words.push(...limitedWordsArray);
+            console.log(words);
+        } catch (error) {
+            console.error('Error in main function:', error);
+        }
+    }
 
 function createGrid() {
     const grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
