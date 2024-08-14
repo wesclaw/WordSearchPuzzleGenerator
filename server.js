@@ -1199,14 +1199,20 @@ const wss = new WebSocket.Server({ server });
 
 app.use(express.static('public'));
 
+
+const GRID_SIZE = 15;
+
+let words = [];
+
 // Function to call OpenAI API
-async function main(data) {
+    async function main(data) {
+        words = []
         const response = await openai.chat.completions.create({
             model: 'gpt-3.5-turbo',
             messages: [
                 {
                     role: 'system',
-                    content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, or any special characters. If fewer than 19 words are relevant, just provide the relevant words.'
+                    content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
                 },
                 {
                     role: 'user',
@@ -1214,41 +1220,25 @@ async function main(data) {
                 }
             ]
         });
-        
+        // const responseData = response.choices[0].message.content;
+
+        // const wordsArray = responseData.trim().split(/\s+/);
+
+        // words.push(...wordsArray);
+
+        // console.log(words);
+
         const responseData = response.choices[0].message.content;
-        console.log(responseData)
-        words.push(...responseData)
+        const wordsArray = responseData.trim().split(/\s+/);
+        const filteredWordsArray = wordsArray.filter(word => word.length <= 15);
+        const limitedWordsArray = filteredWordsArray.slice(0, 19);
+        words.push(...limitedWordsArray);
+        console.log(words);
+
+
+
+        //////try this////above. then try with TRY and Catch method////the problem is based on openai api response. too big words too many words??
     } 
-
-
-    
-
-wss.on('connection', (ws) => {
-    console.log('New client connected');
-
-    ws.on('message', async (message) => { 
-        const topic = message.toString(); 
-        const updatedWords = await main(topic);
-        const grid = createGrid();
-        ws.send(JSON.stringify({ grid, words }));
-    });
-
-    ws.on('close', () => {
-        console.log('Client disconnected');
-    });
-
-    ws.on('error', (error) => {
-        console.error('WebSocket error:', error);
-    });
-});
-
-
-const GRID_SIZE = 15;
-
-// const words = ["NODEJS", "EXPRESS", "HTML", "CSS", "JAVASCRIPT", "WEBSOCKET", "SARAHISGOOD", "HOWTHEFUCKDOESIT"];
-
-const words = [];
-
 
 function createGrid() {
     const grid = Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(''));
@@ -1296,10 +1286,25 @@ function fillGridWithRandomLetters(grid) {
     }
 }
 
-// wss.on('connection', (ws) => {
-//     const grid = createGrid();
-//     ws.send(JSON.stringify({ grid, words }));
-// });
+wss.on('connection', (ws) => {
+    console.log('New client connected');
+
+    ws.on('message', async (message) => { 
+        const topic = message.toString(); 
+        const updatedWords = await main(topic);
+        const grid = createGrid();
+        ws.send(JSON.stringify({ grid, words }));
+    });
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
+
+    ws.on('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
+});
+
 
 server.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');

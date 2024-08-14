@@ -1136,7 +1136,6 @@ const form = document.getElementById('form')
 const input = document.querySelector('.input')
 const moduleContainer = document.querySelector('.module-container')
 
-
 ws.onopen = () => {
     console.log('WebSocket connection opened');
 };
@@ -1172,7 +1171,7 @@ function renderWords(words) {
         // wordElement.textContent = word;
         wordElement.innerHTML = `<p class="word-style">${word}</p>`
         wordElement.style.color = 'black';
-        wordElement.style.display = 'inline-block'; 
+        wordElement.style.display = 'inline-block';
         wordsElement.appendChild(wordElement);
     });
 }
