@@ -1343,8 +1343,6 @@ function connectWebSocket() {
     };
 
     ws.onmessage = (event) => {
-        console.log(event.data);
-
         const data = JSON.parse(event.data);
         const grid = data.grid;
         const words = data.words;
