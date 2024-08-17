@@ -1214,7 +1214,6 @@ let words = [];
                         role: 'system',
                         content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
                     },
-                    /////i wanna make more words maybe 30 is okay? change on slice and here
                     {
                         role: 'user',
                         content: data,
