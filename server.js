@@ -1199,6 +1199,11 @@ const wss = new WebSocket.Server({ server });
 
 app.use(express.static('public'));
 
+app.get('/', (req, res) => {
+    const indexPath = path.join(__dirname, 'public', 'index.html');
+    res.sendFile(indexPath);
+});
+
 
 const GRID_SIZE = 15;
 
