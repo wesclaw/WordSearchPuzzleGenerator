@@ -1203,6 +1203,10 @@ app.get('/', (req, res) => {
     res.sendFile(indexPath);
 });
 
+server.listen(PORT, () => {
+  
+});
+
 const GRID_SIZE = 15;
 
 let words = [];
