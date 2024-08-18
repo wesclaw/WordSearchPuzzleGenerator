@@ -1192,7 +1192,7 @@ const PORT = process.env.PORT || 3000;
 
 // Initialize OpenAI API with your API key
 const openai = new OpenAI({
-    apiKey: process.env.OPEN_AI_API // Make sure this is correctly set in your .env file
+    apiKey: process.env.OPEN_AI_API 
 });
 
 const app = express();
@@ -1200,8 +1200,6 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.static('public'));
-
-// app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
@@ -1211,7 +1209,6 @@ app.get('/', (req, res) => {
     const indexPath = path.join(__dirname, 'public', 'index.html');
     res.sendFile(indexPath);
 });
-
 
 const GRID_SIZE = 15;
 
