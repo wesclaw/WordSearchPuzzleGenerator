@@ -1358,7 +1358,7 @@ function connectWebSocket() {
 
     ws.onerror = (error) => {
         console.error('WebSocket error:', error);
-        ws.close();
+        // ws.close();
     };
 }
 
