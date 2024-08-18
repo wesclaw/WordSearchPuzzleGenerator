@@ -1330,7 +1330,7 @@ let messageQueue = []; // Queue for unsent messages
 
 // Function to connect/reconnect WebSocket
 function connectWebSocket() {
-    ws = new WebSocket('https://wordsearchpuzzlegenerator.onrender.com');
+    ws = new WebSocket('wss://wordsearchpuzzlegenerator.onrender.com');
 
     ws.onopen = () => {
         console.log('WebSocket connection opened');
