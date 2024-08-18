@@ -1199,6 +1199,12 @@ const wss = new WebSocket.Server({ server });
 
 app.use(express.static('public'));
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
 app.get('/', (req, res) => {
     const indexPath = path.join(__dirname, 'public', 'index.html');
     res.sendFile(indexPath);
@@ -1304,9 +1310,9 @@ wss.on('connection', (ws) => {
 });
 
 
-server.listen(3000, () => {
-    console.log('Server is running on https://wordsearchpuzzlegenerator-1.onrender.com');
-});
+// server.listen(3000, () => {
+//     console.log('Server is running on https://wordsearchpuzzlegenerator-1.onrender.com');
+// });
 
 
 
