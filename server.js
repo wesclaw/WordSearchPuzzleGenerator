@@ -1199,9 +1199,9 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// app.use(express.static('public'));
+app.use(express.static('public'));
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
