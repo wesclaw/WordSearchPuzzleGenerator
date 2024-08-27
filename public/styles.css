@@ -12,8 +12,8 @@ body {
 }
 
 .loadBig{
-  width: 180px;
-  height: 180px;
+  width: 100px;
+  height: 100px;
 }
 
 .info{
@@ -50,6 +50,7 @@ body {
   grid-template-columns: repeat(15, var(--cell_height));
   grid-template-rows: repeat(15, var(--cell_width));
   gap: 2px;
+  margin-top: 40px;
 }
 
 .cell {
@@ -90,6 +91,18 @@ body {
   font-family: "Montserrat", sans-serif;
   color: rgb(27, 27, 27);
   font-size: 2.5rem;
+  /* margin: 50px 0px 50px 0px; */
+  margin-top: 100px !important;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: .02em;
+}
+
+.building_text{
+  font-family: "Montserrat", sans-serif;
+  color: rgb(27, 27, 27);
+  font-size: 2.5rem;
   margin: 50px 0px 50px 0px;
   font-optical-sizing: auto;
   font-weight: 400;
@@ -107,6 +120,7 @@ body {
   padding-top: 20px;
   align-items: end;
   position: relative;
+  margin-bottom: 40px;
 }
 
 .name-container p {
@@ -178,7 +192,6 @@ h2{
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.658);
   max-width: 800px;
   padding: 10px 50px 30px;
-
   background: rgb(24,124,228);
   background: linear-gradient(90deg, rgba(24,124,228,0.24467124277456642) 0%, rgba(29,45,62,1) 97%);
 }

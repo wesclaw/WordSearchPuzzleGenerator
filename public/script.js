@@ -1480,7 +1480,7 @@ document.getElementById('downloadPdf').addEventListener('click', async () => {
     adjustPdfPaperSize();  // Adjust size before generating PDF
 
     const spinIcon = document.querySelector('.spinIcon');
-    spinIcon.src = '/icons/spin.gif';
+    spinIcon.src = './icons/spin.gif';
 
     const element = document.querySelector('.pdf_paper');
 
