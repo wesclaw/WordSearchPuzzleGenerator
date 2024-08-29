@@ -175,6 +175,12 @@ body {
   align-items: center;
 }
 
+
+/* remove this to see if it works or not */
+.moduel-container, html{
+  overflow: hidden;
+}
+
 h2{
   font-family: "Montserrat", sans-serif;
   color: rgb(255 255 255);
