@@ -177,9 +177,9 @@ body {
 
 
 /* remove this to see if it works or not */
-.moduel-container, html{
+/* .moduel-container, html{
   overflow: hidden;
-}
+} */
 
 h2{
   font-family: "Montserrat", sans-serif;
