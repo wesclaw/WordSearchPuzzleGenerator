@@ -1335,7 +1335,6 @@ function connectWebSocket() {
     ws.onopen = () => {
         console.log('WebSocket connection opened');
 
-        // Send any unsent messages
         while (messageQueue.length > 0) {
             const msg = messageQueue.shift();
             ws.send(JSON.stringify(msg));
@@ -1358,29 +1357,48 @@ function connectWebSocket() {
 
     ws.onerror = (error) => {
         console.error('WebSocket error:', error);
-        // ws.close();
     };
 }
 
-// Initial WebSocket connection
 connectWebSocket();
+
+const htmlElement = document.documentElement;
+
+htmlElement.style.overflowY = 'hidden';
+
+// 
+const age_select = document.querySelector('.age_select')
+// 
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     const inputValue = input.value;
+    // 
+    const ageChoice = age_select.value
+    console.log(ageChoice)
+    // 
     if (!inputValue) {
         return;
     } else {
-        const message = { value: inputValue };
+        const message = { 
+            value: inputValue,
+            // 
+            age: ageChoice
+            // 
+        };
+        console.log('Message to be sent to server:', message);
         if (ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify(message));
+            // 
             console.log('Sent to server:', inputValue);
+            console.log('Sent to server:', ageChoice);
+            // 
         } else {
-            // Queue the message if WebSocket is not open
             messageQueue.push(message);
             console.log('Message queued:', inputValue);
         }
         input.value = '';
+        htmlElement.style.overflowY = 'auto'
         moduleContainer.remove();
         storedInputValue = inputValue
     }
@@ -1399,7 +1417,7 @@ function renderGrid(grid) {
 }
 
 function renderWords(words) {
-    wordsElement.innerHTML = ''; // Clear previous content
+    wordsElement.innerHTML = ''; 
     words.forEach((word) => {
         const wordElement = document.createElement('span');
         wordElement.innerHTML = `<p class="word-style">${word}</p>`;
@@ -1417,7 +1435,6 @@ function changeTextCase() {
     const pdf_title = document.getElementById('pdf_title');
     let allLowerCase = true;
 
-    // Check if all cells and words are lowercase
     cells.forEach((cell) => {
         if (cell.textContent !== cell.textContent.toLowerCase()) {
             allLowerCase = false;
@@ -1430,7 +1447,6 @@ function changeTextCase() {
         }
     });
 
-    // Change case based on the current state
     if (allLowerCase) {
         pdf_title.textContent = pdf_title.textContent.toUpperCase();
         cells.forEach((cell) => {
@@ -1511,6 +1527,7 @@ document.getElementById('downloadPdf').addEventListener('click', async () => {
 // Call adjustPdfPaperSize on load and resize
 window.addEventListener('load', adjustPdfPaperSize);
 window.addEventListener('resize', adjustPdfPaperSize);
+
 
 resetBtn.addEventListener('click', (e) => {
     window.location.reload();

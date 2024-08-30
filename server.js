@@ -1216,17 +1216,26 @@ let words = [];
     async function main(data) {
         try {
             words = [];
+            // 
+            const prompt = `Generate up to 19 words based on the user's topic "${topic}" that are suitable for the "${ageGroup}" age group. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.`;
+            // 
             const response = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages: [
                     {
                         role: 'system',
-                        content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
+                        // content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
+
+                        // content: data,
+
+                        // 
+                        content: prompt,
+                        // 
                     },
-                    {
-                        role: 'user',
-                        content: data,
-                    }
+                    // {
+                    //     role: 'user',
+                    //     content: data,
+                    // }
                 ]
             });
             const responseData = response.choices[0].message.content;
@@ -1292,8 +1301,29 @@ wss.on('connection', (ws) => {
     console.log('New client connected');
 
     ws.on('message', async (message) => { 
-        const topic = message.toString(); 
-        const updatedWords = await main(topic);
+        // const topic = message.toString(); 
+        // // const updatedWords = await main(topic);
+
+        // // ////
+        // const parsedMessage = JSON.parse(topic);
+        // console.log('Parsed message:', parsedMessage);
+        // const updatedWords = await main(parsedMessage.value);
+        // ////
+
+
+        // 
+        const parsedMessage = JSON.parse(message.toString());  // Parse the JSON string into an object
+        const topic = parsedMessage.value;  // Extract the topic (input value)
+        const ageGroup = parsedMessage.age; // Extract the age group
+
+        console.log('Received topic:', topic);
+        console.log('Received age group:', ageGroup);
+
+        // Use these variables in your AI prompt
+        const updatedWords = await main(topic, ageGroup); 
+
+        // 
+
         const grid = createGrid();
         ws.send(JSON.stringify({ grid, words }));
     });

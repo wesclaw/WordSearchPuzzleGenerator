@@ -165,21 +165,14 @@ body {
 
 .module-container{
   position: absolute;
-  top: 0;
   background-color: rgb(234, 236, 236);
-  width: 100%;
-  height: 100%;
   z-index: 800;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  width: 100vw;
 }
-
-
-/* remove this to see if it works or not */
-/* .moduel-container, html{
-  overflow: hidden;
-} */
 
 h2{
   font-family: "Montserrat", sans-serif;
@@ -206,6 +199,27 @@ form{
   display: flex;
   flex-direction: column;
   row-gap: 10px;
+  position: relative;
+}
+
+.age_limit{
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  font-size: 1.4rem;
+  color: rgba(35, 38, 59, 0.801);
+}
+
+.age_select{
+  height: 90%;
+  font-size: 1.4rem;
+  color: rgba(35, 38, 59, 0.801);
+  border: none;
+  border-radius: 6px;
+  background-color: inherit;
+  cursor: pointer;
 }
 
 .generateBtn{
@@ -269,6 +283,7 @@ form{
 .input{
   position: relative;
   font-size: 1.5rem;
+  color: rgb(35, 38, 59);
   cursor: text;
   line-height: 20px;
   padding: 0 16px;
@@ -276,10 +291,10 @@ form{
   background-color: #fff;
   border: 1px solid #d6d6e7;
   border-radius: 6px;
-  color: rgb(35, 38, 59);
   box-shadow: inset 0 1px 4px 0 rgb(119 122 175 / 30%);
   overflow: hidden;
   transition: all 100ms ease-in-out;
+  box-sizing: border-box;
   :focus {
       border-color: #3c4fe0;
       box-shadow: 0 1px 0 0 rgb(35 38 59 / 5%);
