@@ -1221,14 +1221,12 @@ let words = [];
                 messages: [
                     {
                         role: 'system',
-                        content: 'Generate up to 19 words based on the user\'s topic and age group. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
-                    },
-                    // {
-                    //     role: 'user',
-                    //     content: data,
-                    // }
+                        // content: 'Generate up to 19 words based on the user\'s topic and age group. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
 
-                    // 
+                        // 
+                        content: 'Generate 19 words based on the user\'s topic and age group. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, provide at least 15 words. Do not add commas or periods between any words.'
+                        // 
+                    },
                     {
                         role: 'user',
                         content: `The topic is "${inputValue}" and the target audience is in the "${age}" age group. Please generate age-appropriate words related to this topic.`,
