@@ -1335,10 +1335,10 @@ const age_select = document.querySelector('.age_select')
 function connectWebSocket() {
 
     ///use for production
-    // ws = new WebSocket('https://wordsearchpuzzlegenerator.onrender.com');
+    ws = new WebSocket('https://wordsearchpuzzlegenerator.onrender.com');
 
     ///use for building
-    ws = new WebSocket('ws://localhost:3000');
+    // ws = new WebSocket('ws://localhost:3000');
 
     ws.onopen = () => {
         console.log('WebSocket connection opened');
