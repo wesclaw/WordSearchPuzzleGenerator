@@ -1325,12 +1325,20 @@ const lowerCaseOrUpperCaseBtn = document.getElementById('lowerCaseOrUpperCaseBtn
 
 let ws;
 let storedInputValue = ''; 
-let reconnectInterval = 5000; // 5 seconds
-let messageQueue = []; // Queue for unsent messages
+let reconnectInterval = 5000; 
+let messageQueue = []; 
 
-// Function to connect/reconnect WebSocket
+// 
+const age_select = document.querySelector('.age_select')
+// 
+
 function connectWebSocket() {
-    ws = new WebSocket('https://wordsearchpuzzlegenerator.onrender.com');
+
+    ///use for production
+    // ws = new WebSocket('https://wordsearchpuzzlegenerator.onrender.com');
+
+    ///use for building
+    ws = new WebSocket('ws://localhost:3000');
 
     ws.onopen = () => {
         console.log('WebSocket connection opened');
@@ -1366,25 +1374,36 @@ const htmlElement = document.documentElement;
 
 htmlElement.style.overflowY = 'hidden';
 
-// 
-const age_select = document.querySelector('.age_select')
-// 
-
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     const inputValue = input.value;
+    // 
+    let ageSelect = age_select.value
+    console.log(ageSelect)
+    // 
     if (!inputValue) {
         return;
     } else {
-        const message = { 
-            value: inputValue
-        };
+        // const message = { 
+        //     value: inputValue,
+        //     // 
+        //     age: ageSelect
+        //     // 
+        // };
+
+        // 
+        const message = `${inputValue}|${ageSelect}`;
+        // 
         console.log('Message to be sent to server:', message);
         if (ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify(message));
+            // ws.send(JSON.stringify(message));
+
+            // 
+            ws.send(message);
+            // 
         } else {
             messageQueue.push(message);
-            console.log('Message queued:', inputValue);
+            console.log('Message queued:', message);
         }
         input.value = '';
         htmlElement.style.overflowY = 'auto'
@@ -1460,18 +1479,14 @@ function changeTextCase() {
 lowerCaseOrUpperCaseBtn.addEventListener('click', changeTextCase);
 
 function adjustPdfPaperSize() {
-    // Define A4 dimensions in mm
     const A4_WIDTH_MM = 210;
     const A4_HEIGHT_MM = 297;
 
-    // Calculate dimensions based on viewport size
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    // Aspect ratio for A4
     const aspectRatio = A4_WIDTH_MM / A4_HEIGHT_MM;
 
-    // Adjust dimensions based on viewport size while maintaining aspect ratio
     if (viewportWidth / viewportHeight > aspectRatio) {
         pdfPaperElement.style.width = `${(viewportHeight * aspectRatio)}px`;
         pdfPaperElement.style.height = `${viewportHeight}px`;
@@ -1482,28 +1497,24 @@ function adjustPdfPaperSize() {
 }
 
 document.getElementById('downloadPdf').addEventListener('click', async () => {
-    adjustPdfPaperSize();  // Adjust size before generating PDF
-
+    adjustPdfPaperSize();  
     const spinIcon = document.querySelector('.spinIcon');
     spinIcon.src = './icons/spin.gif';
 
     const element = document.querySelector('.pdf_paper');
 
     const options = {
-        margin: [0, 0], // Margins around the content
-        filename: 'word-search-puzzle.pdf', // Name of the generated PDF file
-        image: { type: 'jpeg', quality: 0.98 }, // Image quality and type
-        html2canvas: { scale: 4 }, // Scale factor for better quality
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } // PDF format
+        margin: [0, 0], 
+        filename: 'word-search-puzzle.pdf', 
+        image: { type: 'jpeg', quality: 0.98 }, 
+        html2canvas: { scale: 4 }, 
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
     };
 
     try {
-        // Generate the PDF as a Blob
         const pdfBlob = await new Promise((resolve, reject) => {
             html2pdf().from(element).set(options).outputPdf('blob').then(resolve).catch(reject);
         });
-
-        // Create a Blob URL and open it in a new tab
         const blobUrl = URL.createObjectURL(pdfBlob);
         window.open(blobUrl, '_blank');
     } catch (error) {
@@ -1513,7 +1524,6 @@ document.getElementById('downloadPdf').addEventListener('click', async () => {
     spinIcon.src = '/icons/print.png';
 });
 
-// Call adjustPdfPaperSize on load and resize
 window.addEventListener('load', adjustPdfPaperSize);
 window.addEventListener('resize', adjustPdfPaperSize);
 

@@ -1183,7 +1183,7 @@
 
 
 require('dotenv').config();
-const { OpenAI } = require('openai'); // Import OpenAI class
+const { OpenAI } = require('openai'); 
 const http = require('http');
 const express = require('express');
 const WebSocket = require('ws');
@@ -1213,7 +1213,7 @@ const GRID_SIZE = 15;
 
 let words = [];
 
-    async function main(data) {
+    async function main(inputValue, age) {
         try {
             words = [];
             const response = await openai.chat.completions.create({
@@ -1221,12 +1221,19 @@ let words = [];
                 messages: [
                     {
                         role: 'system',
-                        content: 'Generate up to 19 words based on the user\'s topic. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
+                        content: 'Generate up to 19 words based on the user\'s topic and age group. Each word should be a single word related to the topic, with no more than 15 letters. Do not use compound words, dashes, numbers, or any special characters. If fewer than 19 words are relevant, just provide the relevant words. Do not add commas or periods between any words.'
                     },
+                    // {
+                    //     role: 'user',
+                    //     content: data,
+                    // }
+
+                    // 
                     {
                         role: 'user',
-                        content: data,
+                        content: `The topic is "${inputValue}" and the target audience is in the "${age}" age group. Please generate age-appropriate words related to this topic.`,
                     }
+                    // 
                 ]
             });
             const responseData = response.choices[0].message.content;
@@ -1282,7 +1289,7 @@ function fillGridWithRandomLetters(grid) {
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
             if (!grid[row][col]) {
-                grid[row][col] = String.fromCharCode(65 + Math.floor(Math.random() * 26)); // Random A-Z
+                grid[row][col] = String.fromCharCode(65 + Math.floor(Math.random() * 26)); 
             }
         }
     }
@@ -1290,10 +1297,18 @@ function fillGridWithRandomLetters(grid) {
 
 wss.on('connection', (ws) => {
     console.log('New client connected');
-
     ws.on('message', async (message) => { 
         const topic = message.toString(); 
-        const updatedWords = await main(topic);
+        console.log(topic)
+        // const updatedWords = await main(topic);
+
+        // 
+        const [inputValue, age] = topic.split('|');
+        console.log('Input Value:', inputValue);
+        console.log('Age:', age);
+        const updatedWords = await main(inputValue, age);
+        // 
+
         const grid = createGrid();
         ws.send(JSON.stringify({ grid, words }));
     });
