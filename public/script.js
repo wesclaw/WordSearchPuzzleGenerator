@@ -1373,26 +1373,15 @@ const age_select = document.querySelector('.age_select')
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     const inputValue = input.value;
-    // 
-    const ageChoice = age_select.value
-    console.log(ageChoice)
-    // 
     if (!inputValue) {
         return;
     } else {
         const message = { 
-            value: inputValue,
-            // 
-            age: ageChoice
-            // 
+            value: inputValue
         };
         console.log('Message to be sent to server:', message);
         if (ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify(message));
-            // 
-            console.log('Sent to server:', inputValue);
-            console.log('Sent to server:', ageChoice);
-            // 
         } else {
             messageQueue.push(message);
             console.log('Message queued:', inputValue);
