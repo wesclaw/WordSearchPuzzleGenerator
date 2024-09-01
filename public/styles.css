@@ -172,6 +172,7 @@ body {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 }
 
 h2{
@@ -193,6 +194,7 @@ h2{
   padding: 10px 50px 30px;
   background: rgb(24,124,228);
   background: linear-gradient(90deg, rgba(24,124,228,0.24467124277456642) 0%, rgba(29,45,62,1) 97%);
+  overflow: hidden;
 }
 
 form{
