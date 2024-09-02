@@ -1372,41 +1372,29 @@ connectWebSocket();
 
 const htmlElement = document.documentElement;
 
-htmlElement.style.overflowY = 'hidden';
+htmlElement.style.overflow = 'hidden';
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     const inputValue = input.value;
-    // 
     let ageSelect = age_select.value
-    console.log(ageSelect)
-    // 
+    
     if (!inputValue) {
         return;
     } else {
-        // const message = { 
-        //     value: inputValue,
-        //     // 
-        //     age: ageSelect
-        //     // 
-        // };
-
-        // 
         const message = `${inputValue}|${ageSelect}`;
         // 
         console.log('Message to be sent to server:', message);
         if (ws.readyState === WebSocket.OPEN) {
             // ws.send(JSON.stringify(message));
 
-            // 
             ws.send(message);
-            // 
         } else {
             messageQueue.push(message);
             console.log('Message queued:', message);
         }
         input.value = '';
-        htmlElement.style.overflowY = 'auto'
+        htmlElement.style.overflow = 'auto'
         moduleContainer.remove();
         storedInputValue = inputValue
     }
