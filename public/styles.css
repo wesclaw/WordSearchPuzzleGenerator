@@ -85,7 +85,7 @@ body {
   height: 100% !important;
   margin: 0 auto !important;
   min-width: 705px !important;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 #pdf_title{
@@ -234,18 +234,6 @@ form{
     display: flex;
     justify-content: center;
     gap: 5px;
-  }
-
-  /* .pdf_paper{
-    height: unset;
-    margin: unset;
-    min-width: unset;
-    overflow: unset;
-  } */
-
-  body{
-    overflow-x: unset;
-    height: 100vh !important;
   }
 
  .container{
