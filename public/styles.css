@@ -88,6 +88,18 @@ body {
   /* overflow: auto; */
 }
 
+.image-wrap{
+  width: 100vw;
+  height: 100vh;
+  opacity: 40%;
+  position: absolute;
+  object-fit: contain;
+  z-index: -1;
+  display: flex;
+}
+
+/* //////////////////////////////////// */
+
 #pdf_title{
   font-family: "Montserrat", sans-serif;
   color: rgb(27, 27, 27);
@@ -173,6 +185,8 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  flex-direction: column;
+
 }
 
 h2{
